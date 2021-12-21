@@ -1,4 +1,4 @@
-import type { Marker } from "./types";
+import type { Marker } from "../types";
 
 export const init = () => {};
 
