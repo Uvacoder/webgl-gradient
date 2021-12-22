@@ -1,27 +1,71 @@
 <script lang="ts">
-	import type { DeleteMarker, Marker, UpdateMarker } from "src/types";
+	import ColorPicker from "../ColorPicker/ColorPicker.svelte";
+	import type {
+		DeleteMarker,
+		Marker,
+		UpdateMarker,
+		ColorPicker as ColorPickerState,
+	} from "src/types";
+	import { rgbToHsv } from "../ColorPicker/colorpicker";
 
 	export let markers: Marker[];
 	export let deleteMarker: DeleteMarker;
 	export let updateMarker: UpdateMarker;
+
+	let pickerState: ColorPickerState = {
+		id: null,
+		color: null,
+		position: null,
+	};
+
+	const openColorPicker = (
+		id: string,
+		elem: HTMLElement,
+		color: Marker["color"]
+	) => {
+		const hsvColor = rgbToHsv(color.r, color.g, color.b, color.a);
+
+		const elemBBox = elem.getBoundingClientRect();
+		pickerState = {
+			id,
+			color: hsvColor,
+			position: { x: elemBBox.x, y: elemBBox.y + elemBBox.height },
+		};
+	};
+
+	const closeColorPicker = () => {
+		pickerState = { id: null, color: null, position: null };
+	};
 </script>
 
 <ul>
-	{#each markers as { id, r, g, b } (id)}
+	{#each markers as { id, color } (id)}
 		<li>
 			<div>ID: {id}</div>
-			<button class="color" style="background-color: rgb({r},{g},{b});" />
+			<button
+				class="color"
+				style="background-color: rgba({color.r},{color.g},{color.b}, {color.a});"
+				on:click={(e) => {
+					openColorPicker(id, e.currentTarget, color);
+				}}
+			/>
 			<button
 				on:click={() => {
-					const r = Math.round(Math.random() * 255);
-					const g = Math.round(Math.random() * 255);
-					const b = Math.round(Math.random() * 255);
-					updateMarker(id, { r, g, b });
-				}}>Color</button
+					if (pickerState.id) {
+						closeColorPicker();
+					}
+					deleteMarker(id);
+				}}>Delete</button
 			>
-			<button on:click={() => deleteMarker(id)}>Delete</button>
 		</li>
 	{/each}
+	{#if pickerState.id}
+		<ColorPicker
+			bind:state={pickerState}
+			{updateMarker}
+			{closeColorPicker}
+		/>
+	{/if}
 </ul>
 
 <style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setMarkersUniformsLocations, setupProgram } from "./gl";
+	import { setMarkersUniformsLocations, setupProgram } from "./lib/gl";
 
 	import Canvas from "./lib/Canvas/Canvas.svelte";
 	import MarkersList from "./lib/Menu/MarkersList.svelte";
@@ -35,11 +35,16 @@
 		markers = [
 			...markers,
 			{
-				r: Math.round(Math.random() * 255),
-				g: Math.round(Math.random() * 255),
-				b: Math.round(Math.random() * 255),
-				x: 592 / 2,
-				y: 762 / 2,
+				color: {
+					r: Math.round(Math.random() * 255),
+					g: Math.round(Math.random() * 255),
+					b: Math.round(Math.random() * 255),
+					a: 1,
+				},
+				position: {
+					x: 0,
+					y: 0,
+				},
 				id: "_" + id,
 				hidden: false,
 				selected: false,

@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import type { Marker, UpdateMarker } from "../../types";
+	import { markerRGBAString, markerTransform } from "../utils";
 	export let marker: Marker;
 	export let updateMarker: UpdateMarker;
 
@@ -13,13 +14,13 @@
 	id={marker.id}
 	class="outer"
 	style="
-	transform: translate({marker.x - markerSize / 2}px, {marker.y -
-		markerSize / 2}px); 
+	transform: {markerTransform(marker.position, markerSize)}; 
 	width: {markerSize}px; 
 	height: {markerSize}px;
 	cursor: {cursor};
 	"
 	on:pointerdown={(e) => {
+		if (e.buttons !== 1) return;
 		e.currentTarget.parentElement.appendChild(e.currentTarget);
 		updateMarker(marker.id, { selected: true });
 	}}
@@ -28,7 +29,7 @@
 	<div class="inner">
 		<div
 			class="fill"
-			style="background-color: rgb({marker.r}, {marker.g}, {marker.b})"
+			style="background-color: {markerRGBAString(marker.color)}"
 		/>
 	</div>
 </div>

@@ -3,7 +3,7 @@
 	import Controls from "./Controls.svelte";
 	import Marker from "./Marker.svelte";
 	import type { Marker as MarkerType, UpdateMarker } from "../../types";
-	import { setMarkersUniforms } from "../../gl";
+	import { setMarkersUniforms } from "../gl";
 
 	export let markers: MarkerType[];
 	export let updateMarker: UpdateMarker;
@@ -79,6 +79,8 @@
 				e.currentTarget.setPointerCapture(e.pointerId);
 			}}
 			on:pointermove={(e) => {
+				if (e.buttons !== 1) return;
+
 				if (selectedMarker) {
 					let x = e.clientX - bbox.x;
 					let y = e.clientY - bbox.y;
@@ -88,7 +90,7 @@
 					if (x > bbox.width) x = bbox.width;
 					if (y > bbox.height) y = bbox.height;
 
-					updateMarker(selectedMarker.id, { x, y });
+					updateMarker(selectedMarker.id, { position: { x, y } });
 				}
 			}}
 			on:pointerup={() => deselectMarkers()}

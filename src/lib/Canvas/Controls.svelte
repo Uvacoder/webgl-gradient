@@ -1,5 +1,12 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	export let createMarker: Function;
+
+	// TODO: Remove
+	onMount(() => {
+		createMarker();
+	});
 </script>
 
 <div>

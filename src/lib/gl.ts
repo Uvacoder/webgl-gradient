@@ -36,12 +36,17 @@ const createGradientFsSource = (markersLen: number): string => {
 		);
 	}
 
-	vec3 rgb (vec3 color) {
-		return color / 255.0;
+	vec4 rgba (vec4 color) {
+		return vec4(
+			color.x / 255.0,
+			color.y / 255.0,
+			color.z / 255.0,
+			color.w
+		);
 	}
 	
 	struct Marker {
-		vec3 color;
+		vec4 color;
 		vec2 pos;
 	};
 
@@ -57,7 +62,7 @@ const createGradientFsSource = (markersLen: number): string => {
 		uv.y /= aspect; 
 		
 
-		vec3 color = vec3(1.0);
+		vec4 color = vec4(1.0);
 
 		for(int i = 0; i < ${markersLen}; i++) {
 			vec2 pos = mouseToUv(u_resolution, u_marker[i].pos);
@@ -67,12 +72,12 @@ const createGradientFsSource = (markersLen: number): string => {
 			d = d * -1.0 + 1.0;
 			d *= 2.0;
 
-			vec3 loopColor = d * rgb(u_marker[i].color);
+			vec4 loopColor = d * rgba(u_marker[i].color);
 
 			color = mix(color, loopColor, 0.5);
 		}
 
-		outColor = vec4(color, 1.0);
+		outColor = vec4(color);
 	}
 	`;
 
@@ -156,13 +161,18 @@ export const setMarkersUniforms = (
 	markers: Marker[]
 ) => {
 	for (let i = 0; i < markers.length; i++) {
-		gl.uniform3f(
+		gl.uniform4f(
 			markers[i].colLocation,
-			markers[i].r,
-			markers[i].g,
-			markers[i].b
+			markers[i].color.r,
+			markers[i].color.g,
+			markers[i].color.b,
+			markers[i].color.a
 		);
-		gl.uniform2f(markers[i].posLocation, markers[i].x, markers[i].y);
+		gl.uniform2f(
+			markers[i].posLocation,
+			markers[i].position.x,
+			markers[i].position.y
+		);
 	}
 };
 
