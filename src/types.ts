@@ -1,9 +1,14 @@
 export type Marker = {
-	r: number;
-	g: number;
-	b: number;
-	x: number;
-	y: number;
+	color: {
+		r: number;
+		g: number;
+		b: number;
+		a: number;
+	};
+	position: {
+		x: number;
+		y: number;
+	};
 	id: string;
 	hidden: boolean;
 	selected: boolean;
@@ -13,3 +18,23 @@ export type Marker = {
 
 export type UpdateMarker = (id: string, markerPartial: Partial<Marker>) => void;
 export type DeleteMarker = (id: string) => void;
+
+export type ColorPicker =
+	| {
+			id: null;
+			color: null;
+			position: null;
+	  }
+	| {
+			id: string;
+			color: {
+				hue: number;
+				saturation: number;
+				value: number;
+				alpha: number;
+			};
+			position: {
+				x: number;
+				y: number;
+			};
+	  };
