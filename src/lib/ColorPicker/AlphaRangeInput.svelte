@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ColorPicker } from "src/types";
-	import { hsvToHsl, hsvToRgb } from "./colorpicker";
+	import { hsvToHsl } from "./colorpicker";
 
 	export let color: ColorPicker["color"];
 

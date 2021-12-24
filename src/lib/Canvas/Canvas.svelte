@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { onMount, tick } from "svelte";
+	import { onMount } from "svelte";
 	import Controls from "./Controls.svelte";
 	import Marker from "./Marker.svelte";
 	import type { Marker as MarkerType, UpdateMarker } from "../../types";
 	import { setMarkersUniforms } from "../gl";
-	import ColorPicker from "../ColorPicker/ColorPicker.svelte";
 	import CheckeredBg from "../Shared/CheckeredBg.svelte";
 
 	export let markers: MarkerType[];
