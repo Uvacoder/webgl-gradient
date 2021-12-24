@@ -4,6 +4,8 @@
 	import Marker from "./Marker.svelte";
 	import type { Marker as MarkerType, UpdateMarker } from "../../types";
 	import { setMarkersUniforms } from "../gl";
+	import ColorPicker from "../ColorPicker/ColorPicker.svelte";
+	import CheckeredBg from "../Shared/CheckeredBg.svelte";
 
 	export let markers: MarkerType[];
 	export let updateMarker: UpdateMarker;
@@ -16,13 +18,35 @@
 
 	$: selectedMarker = markers.find((m) => m.selected === true);
 
+	let container: HTMLElement;
 	let bbox: DOMRect;
 	let canvas: HTMLCanvasElement;
-	let w;
-	let h;
+	let w: number;
+	let h: number;
+
+	$: dpr = Math.min(window.devicePixelRatio, 2);
 
 	onMount(() => {
-		const container = document.querySelector(".markers_container");
+		const onResize = () => {
+			const newBbox = container.getBoundingClientRect();
+			const wDiff = newBbox.width / bbox.width;
+			const hDiff = newBbox.height / bbox.height;
+			bbox = newBbox;
+			w = newBbox.width;
+			h = newBbox.height;
+
+			for (const marker of markers) {
+				const position = {
+					x: marker.position.x * wDiff,
+					y: marker.position.y * hDiff,
+				};
+				updateMarker(marker.id, { position });
+			}
+		};
+
+		window.addEventListener("resize", onResize, { passive: true });
+
+		container = document.querySelector(".markers_container");
 		bbox = container.getBoundingClientRect();
 
 		gl = canvas.getContext("webgl2");
@@ -57,23 +81,26 @@
 
 		loop();
 
-		return () => window.cancelAnimationFrame(frame);
+		return () => {
+			window.cancelAnimationFrame(frame);
+			window.removeEventListener("resize", onResize);
+		};
 	});
-
-	// TODO: Handle resize, devicepixel ecc.
 </script>
 
 <main>
 	<Controls {createMarker} />
 	<div class="container">
+		<CheckeredBg size={20} />
 		<canvas
 			bind:this={canvas}
 			bind:clientWidth={w}
 			bind:clientHeight={h}
-			width={w}
-			height={h}
+			width={w * dpr}
+			height={h * dpr}
 		/>
 		<div
+			bind:this={container}
 			class="markers_container"
 			on:pointerdown={(e) => {
 				e.currentTarget.setPointerCapture(e.pointerId);
@@ -109,21 +136,23 @@
 		margin-right: 2rem;
 		display: flex;
 		flex-direction: column;
+		align-items: flex-end;
 	}
 
 	.container {
-		width: 100%;
-		height: 100%;
+		width: 90%;
+		height: 80%;
 		background-color: rgb(99, 93, 93);
 		position: relative;
+		border: 2px solid green;
 	}
 
 	canvas {
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 90%;
-		height: 90%;
+		width: 100%;
+		height: 100%;
 		display: block;
 		pointer-events: none;
 		touch-action: none;
@@ -133,8 +162,8 @@
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 90%;
-		height: 90%;
+		width: 100%;
+		height: 100%;
 		z-index: 1;
 		border: 2px solid red;
 	}

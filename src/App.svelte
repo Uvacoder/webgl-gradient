@@ -4,6 +4,7 @@
 	import Canvas from "./lib/Canvas/Canvas.svelte";
 	import MarkersList from "./lib/Menu/MarkersList.svelte";
 	import type { DeleteMarker, Marker, UpdateMarker } from "./types";
+	import ColorPickerContext from "./lib/ColorPicker/ColorPickerContext.svelte";
 
 	let markers: Marker[] = [];
 
@@ -71,20 +72,22 @@
 </script>
 
 <main>
-	<Canvas
-		{resUniformLocation}
-		bind:gl
-		{program}
-		{markers}
-		{updateMarker}
-		{createMarker}
-		{deselectMarkers}
-		{makeProgram}
-	/>
-	<div class="menu_wrapper">
-		<h3>Menu</h3>
-		<MarkersList {markers} {deleteMarker} {updateMarker} />
-	</div>
+	<ColorPickerContext {updateMarker}>
+		<Canvas
+			{resUniformLocation}
+			bind:gl
+			{program}
+			{markers}
+			{updateMarker}
+			{createMarker}
+			{deselectMarkers}
+			{makeProgram}
+		/>
+		<div class="menu_wrapper">
+			<h3>Menu</h3>
+			<MarkersList {markers} {deleteMarker} />
+		</div>
+	</ColorPickerContext>
 </main>
 
 <style>

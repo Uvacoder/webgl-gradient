@@ -1,30 +1,41 @@
-<svelte:options immutable={true} />
-
 <script lang="ts">
-	import type { Marker, UpdateMarker } from "../../types";
+	import { getContext } from "svelte";
+
+	import type {
+		ColorPickerContextType,
+		Marker,
+		UpdateMarker,
+	} from "../../types";
 	import { markerRGBAString, markerTransform } from "../utils";
 	export let marker: Marker;
 	export let updateMarker: UpdateMarker;
 
+	const { openColorPicker } =
+		getContext<ColorPickerContextType>("color_picker");
 	const markerSize = 24;
-	$: cursor = marker.selected ? "grab" : "pointer";
+
+	// TODO: Problem with cursor still
 </script>
 
 <div
 	id={marker.id}
-	class="outer"
+	tabindex="0"
+	class="outer {marker.selected ? 'selected' : ''}"
 	style="
 	transform: {markerTransform(marker.position, markerSize)}; 
 	width: {markerSize}px; 
 	height: {markerSize}px;
-	cursor: {cursor};
 	"
 	on:pointerdown={(e) => {
 		if (e.buttons !== 1) return;
 		e.currentTarget.parentElement.appendChild(e.currentTarget);
 		updateMarker(marker.id, { selected: true });
 	}}
-	on:pointerup={() => updateMarker(marker.id, { selected: false })}
+	on:contextmenu={(e) => {
+		e.preventDefault();
+		// TODO: Position picker to not overlap with marker
+		openColorPicker(marker.id, e.currentTarget, marker.color);
+	}}
 >
 	<div class="inner">
 		<div
@@ -41,6 +52,12 @@
 		left: 0;
 		border: 2px solid black;
 		border-radius: 50%;
+		outline: none;
+		cursor: pointer;
+	}
+
+	.outer.selected {
+		outline: 2px solid red;
 	}
 
 	.inner {

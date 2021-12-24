@@ -1,6 +1,10 @@
 <script lang="ts">
-	import type { ColorPicker, UpdateMarker } from "src/types";
-	import { onMount } from "svelte";
+	import type {
+		ColorPicker,
+		UpdateMarker,
+		ColorPickerContextType,
+	} from "src/types";
+	import { getContext, onMount } from "svelte";
 	import { positionWithinWindowBounds } from "../utils";
 	import { hsvToRgb } from "./colorpicker";
 	import Canvas from "./Canvas.svelte";
@@ -10,7 +14,9 @@
 
 	export let state: ColorPicker;
 	export let updateMarker: UpdateMarker;
-	export let closeColorPicker: () => void;
+
+	const { closeColorPicker } =
+		getContext<ColorPickerContextType>("color_picker");
 
 	let elemRef: HTMLElement | null = null;
 
@@ -78,7 +84,7 @@
 	}
 
 	:global(.picker_range_input::-webkit-slider-runnable-track) {
-		width: 300px;
+		width: 200px;
 		height: 14px;
 		border: none;
 		border-radius: 10px;
@@ -95,7 +101,7 @@
 	}
 
 	:global(.picker_range_input::-moz-range-track) {
-		width: 300px;
+		width: 200px;
 		height: 14px;
 		border: none;
 		border-radius: 10px;

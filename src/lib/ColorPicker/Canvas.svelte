@@ -2,6 +2,7 @@
 	import type { ColorPicker } from "src/types";
 
 	import { onMount } from "svelte";
+	import CheckeredBg from "../Shared/CheckeredBg.svelte";
 	import { markerTransform, getPointerPosition } from "../utils";
 	import { fillColorPicker, hsvToRgb } from "./colorpicker";
 
@@ -40,7 +41,7 @@
 </script>
 
 <div class="gradient_canvas_container">
-	<div class="canvas_bg_checkered" />
+	<CheckeredBg size={20} />
 	<canvas
 		bind:this={canvas}
 		bind:clientWidth={w}
@@ -109,17 +110,6 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-	}
-
-	.canvas_bg_checkered {
-		background-image: linear-gradient(45deg, #acacac 25%, transparent 25%),
-			linear-gradient(-45deg, #acacac 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #acacac 75%),
-			linear-gradient(-45deg, transparent 75%, #acacac 75%);
-		background-size: 20px 20px;
-		background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-		height: 100%;
-		width: 100%;
 	}
 
 	.outer {

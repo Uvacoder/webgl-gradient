@@ -24,6 +24,7 @@
 		justify-content: flex-end;
 		align-items: flex-end;
 		height: 100px;
+		width: 100%;
 		background-color: rgb(161, 152, 152);
 	}
 </style>

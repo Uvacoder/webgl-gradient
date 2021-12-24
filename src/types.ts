@@ -38,3 +38,12 @@ export type ColorPicker =
 				y: number;
 			};
 	  };
+
+export type ColorPickerContextType = {
+	openColorPicker: (
+		id: string,
+		elem: HTMLElement,
+		color: Marker["color"]
+	) => void;
+	closeColorPicker: () => void;
+};
