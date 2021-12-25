@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { ColorPicker } from "src/types";
+	import type { ColorPickerState } from "src/types";
 
-	export let color: ColorPicker["color"];
+	export let color: ColorPickerState["color"];
 
 	let inputRef: HTMLInputElement;
 

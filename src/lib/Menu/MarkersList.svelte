@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type {
-		ColorPickerContextType,
+		ColorPickerContextState,
 		DeleteMarker,
 		Marker,
-		UpdateMarker,
 	} from "src/types";
 	import { getContext } from "svelte";
 
@@ -11,7 +10,7 @@
 	export let deleteMarker: DeleteMarker;
 
 	const { openColorPicker, closeColorPicker } =
-		getContext<ColorPickerContextType>("color_picker");
+		getContext<ColorPickerContextState>("color_picker");
 </script>
 
 <ul>

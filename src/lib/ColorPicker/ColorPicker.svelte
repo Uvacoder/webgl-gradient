@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type {
-		ColorPicker,
+		ColorPickerState,
 		UpdateMarker,
-		ColorPickerContextType,
+		ColorPickerContextState,
 	} from "src/types";
 	import { getContext, onMount } from "svelte";
 	import { positionWithinWindowBounds } from "../utils";
@@ -12,11 +12,11 @@
 	import AlphaRangeInput from "./AlphaRangeInput.svelte";
 	import RgbaInputField from "./RGBAInputField.svelte";
 
-	export let state: ColorPicker;
+	export let state: ColorPickerState;
 	export let updateMarker: UpdateMarker;
 
 	const { closeColorPicker } =
-		getContext<ColorPickerContextType>("color_picker");
+		getContext<ColorPickerContextState>("color_picker");
 
 	let elemRef: HTMLElement | null = null;
 

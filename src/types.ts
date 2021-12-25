@@ -19,7 +19,7 @@ export type Marker = {
 export type UpdateMarker = (id: string, markerPartial: Partial<Marker>) => void;
 export type DeleteMarker = (id: string) => void;
 
-export type ColorPicker =
+export type ColorPickerState =
 	| {
 			id: null;
 			color: null;
@@ -39,7 +39,7 @@ export type ColorPicker =
 			};
 	  };
 
-export type ColorPickerContextType = {
+export type ColorPickerContextState = {
 	openColorPicker: (
 		id: string,
 		elem: HTMLElement,

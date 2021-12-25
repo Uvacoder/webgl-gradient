@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { ColorPicker } from "src/types";
+	import type { ColorPickerState } from "src/types";
 
 	import { onMount } from "svelte";
 	import CheckeredBg from "../Shared/CheckeredBg.svelte";
 	import { markerTransform, getPointerPosition } from "../utils";
 	import { fillColorPicker, hsvToRgb } from "./colorpicker";
 
-	export let color: ColorPicker["color"];
+	export let color: ColorPickerState["color"];
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;

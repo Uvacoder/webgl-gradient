@@ -2,7 +2,7 @@
 	import { getContext } from "svelte";
 
 	import type {
-		ColorPickerContextType,
+		ColorPickerContextState,
 		Marker,
 		UpdateMarker,
 	} from "../../types";
@@ -11,7 +11,7 @@
 	export let updateMarker: UpdateMarker;
 
 	const { openColorPicker } =
-		getContext<ColorPickerContextType>("color_picker");
+		getContext<ColorPickerContextState>("color_picker");
 	const markerSize = 24;
 
 	// TODO: Problem with cursor still
