@@ -3,8 +3,14 @@
 
 	import Canvas from "./lib/Canvas/Canvas.svelte";
 	import MarkersList from "./lib/Menu/MarkersList.svelte";
-	import type { DeleteMarker, Marker, UpdateMarker } from "./types";
+	import type {
+		AppContext,
+		DeleteMarker,
+		Marker,
+		UpdateMarker,
+	} from "./types";
 	import ColorPickerContext from "./lib/ColorPicker/ColorPickerContext.svelte";
+	import { setContext } from "svelte";
 
 	let markers: Marker[] = [];
 
@@ -13,6 +19,17 @@
 	let gl: WebGL2RenderingContext;
 	let program: WebGLProgram;
 	let resUniformLocation: WebGLUniformLocation;
+
+	setContext<AppContext>("app", {
+		getMarkers: () => markers,
+		setMarkersVisibility: (visible) => {
+			for (const marker of markers) {
+				marker.visible = visible;
+			}
+
+			markers = markers;
+		},
+	});
 
 	const updateMarker: UpdateMarker = (id, markerPartial) => {
 		const index = markers.findIndex((m) => m.id === id);
@@ -47,7 +64,7 @@
 					y: 0,
 				},
 				id: "_" + id,
-				hidden: false,
+				visible: true,
 				selected: false,
 				colLocation: -1,
 				posLocation: -1,

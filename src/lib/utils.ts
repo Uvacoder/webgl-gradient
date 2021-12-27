@@ -43,3 +43,12 @@ export const getPointerPosition = (
 
 	return { x, y };
 };
+
+// Source: https://zellwk.com/blog/keyboard-focusable-elements/
+export const getFocusableElements = (elem: HTMLElement): HTMLElement[] => {
+	const nodes: NodeListOf<HTMLElement> = elem.querySelectorAll(
+		'a, button, input, textarea, select, details,[tabindex]:not([tabindex="-1"])'
+	);
+
+	return Array.from(nodes).filter((el) => !el.hasAttribute("disabled"));
+};

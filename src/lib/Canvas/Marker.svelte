@@ -2,7 +2,7 @@
 	import { getContext } from "svelte";
 
 	import type {
-		ColorPickerContextState,
+		ColorPickerStateContext,
 		Marker,
 		UpdateMarker,
 	} from "../../types";
@@ -11,7 +11,7 @@
 	export let updateMarker: UpdateMarker;
 
 	const { openColorPicker } =
-		getContext<ColorPickerContextState>("color_picker");
+		getContext<ColorPickerStateContext>("color_picker");
 	const markerSize = 24;
 
 	// TODO: Problem with cursor still
@@ -20,7 +20,9 @@
 <div
 	id={marker.id}
 	tabindex="0"
-	class="outer {marker.selected ? 'selected' : ''}"
+	class="outer {marker.selected ? 'selected' : ''} {marker.visible
+		? ''
+		: 'hidden'}"
 	style="
 	transform: {markerTransform(marker.position, markerSize)}; 
 	width: {markerSize}px; 
@@ -30,6 +32,11 @@
 		if (e.buttons !== 1) return;
 		e.currentTarget.parentElement.appendChild(e.currentTarget);
 		updateMarker(marker.id, { selected: true });
+	}}
+	on:keydown={(e) => {
+		if (e.code === "Enter" || e.code === "Space") {
+			openColorPicker(marker.id, e.currentTarget, marker.color);
+		}
 	}}
 	on:contextmenu={(e) => {
 		e.preventDefault();
@@ -54,6 +61,12 @@
 		border-radius: 50%;
 		outline: none;
 		cursor: pointer;
+	}
+
+	.hidden {
+		visibility: hidden;
+		pointer-events: none;
+		touch-action: none;
 	}
 
 	.outer.selected {

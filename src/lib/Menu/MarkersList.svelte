@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type {
-		ColorPickerContextState,
+		ColorPickerStateContext,
 		DeleteMarker,
 		Marker,
 	} from "src/types";
@@ -10,7 +10,7 @@
 	export let deleteMarker: DeleteMarker;
 
 	const { openColorPicker, closeColorPicker } =
-		getContext<ColorPickerContextState>("color_picker");
+		getContext<ColorPickerStateContext>("color_picker");
 </script>
 
 <ul>

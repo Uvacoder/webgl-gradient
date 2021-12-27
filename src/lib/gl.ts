@@ -1,8 +1,4 @@
-import type { Marker } from "../types";
-
-export const init = () => {};
-
-export const resizeCanvas = () => {};
+import type { Marker, StillImageMarker } from "../types";
 
 const defaultVsSource = `#version 300 es
 	
@@ -273,3 +269,60 @@ float snoise(vec2 v)
   return 130.0 * dot(m, g);
 }
 `;
+
+export const generateGradientImage = (
+	markersToCopy: Marker[],
+	oldSize: { width: number; height: number },
+	size: { width: number; height: number }
+) => {
+	const markers: StillImageMarker[] = [];
+
+	// Translate markers based on image size
+	const wDiff = size.width / oldSize.width;
+	const hDiff = size.height / oldSize.height;
+
+	for (let i = 0; i < markersToCopy.length; i++) {
+		const marker: StillImageMarker = {
+			color: { ...markersToCopy[i].color },
+			position: { ...markersToCopy[i].position },
+			posLocation: -1,
+			colLocation: -1,
+		};
+
+		marker.position.x *= wDiff;
+		marker.position.y *= hDiff;
+
+		markers.push(marker);
+	}
+
+	const offCanvas = document.createElement("canvas");
+
+	// TODO: Do I need this ?
+	const dpr = Math.min(window.devicePixelRatio, 2);
+	offCanvas.width = size.width * dpr;
+	offCanvas.height = size.height * dpr;
+
+	const gl = offCanvas.getContext("webgl2", { alpha: true, antialias: true });
+
+	// Draw
+	gl.viewport(0, 0, offCanvas.width, offCanvas.height);
+	gl.clearColor(0, 0, 0, 0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+
+	const program = setupProgram(gl, markers.length);
+
+	setMarkersUniformsLocations(gl, program, markers as Marker[]);
+
+	const resUniformLocation = gl.getUniformLocation(program, "u_resolution");
+
+	gl.useProgram(program);
+
+	if (markers.length) {
+		setMarkersUniforms(gl, markers as Marker[]);
+		gl.uniform2f(resUniformLocation, size.width, size.height);
+	}
+
+	gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+	return offCanvas.toDataURL();
+};

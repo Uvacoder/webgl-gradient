@@ -1,12 +1,22 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import type { AppContext } from "src/types";
+
+	import { getContext, onMount } from "svelte";
+	import Download from "./Download.svelte";
 
 	export let createMarker: Function;
+	let markersVisible = true;
+
+	const { setMarkersVisibility } = getContext<AppContext>("app");
+
+	$: setMarkersVisibility(markersVisible);
 
 	// TODO: Remove
 	onMount(() => {
 		createMarker();
 	});
+
+	// Export / Download select w/ different resolutions
 </script>
 
 <div>
@@ -14,7 +24,12 @@
 		>Create Marker</button
 	>
 	<button>Save</button>
-	<button>Hide Markers</button>
+	<button
+		on:click={() => {
+			markersVisible = !markersVisible;
+		}}>{markersVisible ? "Hide" : "Show"} Markers</button
+	>
+	<Download />
 </div>
 
 <style>

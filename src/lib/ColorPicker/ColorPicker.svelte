@@ -2,7 +2,7 @@
 	import type {
 		ColorPickerState,
 		UpdateMarker,
-		ColorPickerContextState,
+		ColorPickerStateContext,
 	} from "src/types";
 	import { getContext, onMount } from "svelte";
 	import { positionWithinWindowBounds } from "../utils";
@@ -16,7 +16,7 @@
 	export let updateMarker: UpdateMarker;
 
 	const { closeColorPicker } =
-		getContext<ColorPickerContextState>("color_picker");
+		getContext<ColorPickerStateContext>("color_picker");
 
 	let elemRef: HTMLElement | null = null;
 

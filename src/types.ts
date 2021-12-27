@@ -10,11 +10,16 @@ export type Marker = {
 		y: number;
 	};
 	id: string;
-	hidden: boolean;
+	visible: boolean;
 	selected: boolean;
 	colLocation: WebGLUniformLocation;
 	posLocation: WebGLUniformLocation;
 };
+
+export type StillImageMarker = Pick<
+	Marker,
+	"color" | "position" | "posLocation" | "colLocation"
+>;
 
 export type UpdateMarker = (id: string, markerPartial: Partial<Marker>) => void;
 export type DeleteMarker = (id: string) => void;
@@ -39,11 +44,20 @@ export type ColorPickerState =
 			};
 	  };
 
-export type ColorPickerContextState = {
+export type ColorPickerStateContext = {
 	openColorPicker: (
 		id: string,
 		elem: HTMLElement,
 		color: Marker["color"]
 	) => void;
 	closeColorPicker: () => void;
+};
+
+export type AppContext = {
+	getMarkers: () => Marker[];
+	setMarkersVisibility: (visible: boolean) => void;
+};
+
+export type CanvasContext = {
+	getSize: () => DOMRect;
 };

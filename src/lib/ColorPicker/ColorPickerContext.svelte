@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type {
 		ColorPickerState,
-		ColorPickerContextState,
+		ColorPickerStateContext,
 		UpdateMarker,
 	} from "src/types";
 
@@ -17,7 +17,7 @@
 		position: null,
 	};
 
-	setContext<ColorPickerContextState>("color_picker", {
+	setContext<ColorPickerStateContext>("color_picker", {
 		openColorPicker: (id, elem, color) => {
 			const hsvColor = rgbToHsv(color.r, color.g, color.b, color.a);
 

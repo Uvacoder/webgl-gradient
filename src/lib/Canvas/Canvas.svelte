@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount, setContext } from "svelte";
 	import Controls from "./Controls.svelte";
 	import Marker from "./Marker.svelte";
-	import type { Marker as MarkerType, UpdateMarker } from "../../types";
+	import type {
+		CanvasContext,
+		Marker as MarkerType,
+		UpdateMarker,
+	} from "../../types";
 	import { setMarkersUniforms } from "../gl";
 	import CheckeredBg from "../Shared/CheckeredBg.svelte";
 
@@ -22,6 +26,10 @@
 	let canvas: HTMLCanvasElement;
 	let w: number;
 	let h: number;
+
+	setContext<CanvasContext>("canvas", {
+		getSize: () => bbox,
+	});
 
 	$: dpr = Math.min(window.devicePixelRatio, 2);
 
@@ -48,7 +56,7 @@
 		container = document.querySelector(".markers_container");
 		bbox = container.getBoundingClientRect();
 
-		gl = canvas.getContext("webgl2");
+		gl = canvas.getContext("webgl2", { alpha: true });
 
 		// Init makeProgram
 		makeProgram();
