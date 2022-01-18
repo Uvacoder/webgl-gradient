@@ -1,6 +1,8 @@
 import type { Marker, StillImageMarker } from "../types";
 
 const defaultVsSource = `#version 300 es
+
+#pragma vscode_glsllint_stage : vert
 	
 in vec2 a_position;
 
@@ -10,17 +12,21 @@ void main(){
 `;
 
 const defaultFsSource = `#version 300 es
+
+#pragma vscode_glsllint_stage : frag
 	
 precision highp float;
 
 out vec4 outColor;
 
 void main(){
-	outColor = vec4(1.0);
+	outColor = vec4(0.0, 0.0, 1.0, 1.0);
 }`;
 
 const createGradientFsSource = (markersLen: number): string => {
 	const fs = `#version 300 es
+
+	#pragma vscode_glsllint_stage : frag
 
 	precision highp float;
 

@@ -3,6 +3,7 @@
 
 	import { getContext, onMount } from "svelte";
 	import Download from "./Download.svelte";
+	import Export from "./Export.svelte";
 
 	export let createMarker: Function;
 	let markersVisible = true;
@@ -15,21 +16,19 @@
 	onMount(() => {
 		createMarker();
 	});
-
-	// Export / Download select w/ different resolutions
 </script>
 
 <div>
 	<button style="margin-right: auto;" on:click={() => createMarker()}
 		>Create Marker</button
 	>
-	<button>Save</button>
 	<button
 		on:click={() => {
 			markersVisible = !markersVisible;
 		}}>{markersVisible ? "Hide" : "Show"} Markers</button
 	>
 	<Download />
+	<Export />
 </div>
 
 <style>
